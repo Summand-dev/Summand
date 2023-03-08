@@ -7,8 +7,8 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: ⬆
-  # php
-  - package-ecosystem: "composer"
+  # Python
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
