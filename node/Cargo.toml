@@ -1,0 +1,10 @@
+[package]
+name = "node"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[lib]
+name = "node"
+path = "src/lib.rs"

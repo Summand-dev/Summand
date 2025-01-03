@@ -1,0 +1,1 @@
+cargo watch -x run --features api-module,node-module

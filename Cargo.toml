@@ -1,0 +1,28 @@
+[package]
+name = "Summand"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [
+    "api",
+    "node",
+]
+
+[features]
+api-module=["api"]
+node-module=["node"]
+
+[dependencies]
+api = { path = "./api", optional = true }
+node = { path = "./node", optional = true }
+tokio = { version = "1.42.0", features = ["full"] }
+mini-redis = "0.4.1"
+
+[lib]
+name = "summand"
+path = "src/lib.rs"
+
+[[bin]]
+name = "summand"
+path = "src/main.rs"
