@@ -1,23 +1,25 @@
+use crate::argument::Argument;
+
 #[derive(Debug)]
 pub struct Command {
     pub name: String,
     pub description: String,
     pub command: String,
-    pub arguments: Vec<String>,
+    pub arguments: Vec<Argument>,
 }
 
 impl Command {
     pub fn new(
-        name: String,
-        description: Option<String>,
-        command: String,
-        arguments: Option<Vec<String>>,
+        name: &str,
+        description: Option<&str>,
+        command: &str,
+        arguments: Option<Vec<Argument>>,
     ) -> Self {
         Self {
-            name: String::from(name),
-            description: description.unwrap_or(String::from("")),
-            command: String::from(command),
-            arguments: arguments.unwrap_or(vec![]),
+            name: name.to_string(),
+            description: description.unwrap_or("").to_string(),
+            command: command.to_string(),
+            arguments: arguments.unwrap_or(Vec::new()),
         }
     }
 }
