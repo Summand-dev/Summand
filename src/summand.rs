@@ -1,6 +1,6 @@
 use crate::command::Command;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Summand {
     pub name: String,
     pub description: String,
