@@ -1,10 +1,10 @@
 #[derive(Clone, Debug)]
-pub struct Argument {
+pub struct CommandArgument {
     pub name: Option<String>,
     pub value: Option<String>,
 }
 
-impl Argument {
+impl CommandArgument {
     pub fn new(name: Option<&str>, value: Option<&str>) -> Self {
         Self {
             name: match name {

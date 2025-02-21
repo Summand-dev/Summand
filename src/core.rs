@@ -1,5 +1,5 @@
-use crate::command::Command;
 use crate::summand::Summand;
+use crate::{command::Command, workspace::SummandWorkspace};
 use core::fmt;
 use std::{
     collections::VecDeque,
@@ -12,6 +12,7 @@ use tokio::process;
 pub struct SummandRunner {
     queue: VecDeque<Summand>,
     run_queue: VecDeque<SummandRunnerResult>,
+    pub workspace: SummandWorkspace,
 }
 
 #[derive(Debug)]
@@ -51,6 +52,7 @@ impl SummandRunner {
         SummandRunner {
             queue: VecDeque::new(),
             run_queue: VecDeque::new(),
+            workspace: SummandWorkspace::new(),
         }
     }
 
@@ -70,20 +72,34 @@ impl SummandRunner {
         self.queue.push_back(summand.to_owned());
     }
 
-    async fn run_command(&self, command: Command) -> Result<SummandRunnerResult, std::io::Error> {
+    async fn run_command(&self, command: &Command) -> Result<SummandRunnerResult, std::io::Error> {
         // Build the command arguments
         let formatted_args: Vec<String> = command
             .arguments
             .iter()
             .map(|a| match &a.name {
-                Some(name) => format!("{}={}", name, a.value.clone().unwrap_or_default()),
-                None => format!("{}", a.value.clone().unwrap_or_default()),
+                Some(name) => match &a.value {
+                    Some(value) => format!(
+                        "{}={}",
+                        self.workspace.fill(name),
+                        self.workspace.fill(value)
+                    ),
+                    None => format!("{}", self.workspace.fill(name)),
+                },
+                None => format!(
+                    "{}",
+                    self.workspace
+                        .fill(a.value.clone().unwrap_or_default().as_str())
+                ),
             })
             .collect();
 
         println!("args: {:?}, {:?}", formatted_args, command.arguments);
         let start_time = SystemTime::now();
-        let result = process::Command::new(command.program)
+
+        // Apply workspace variables to command and execute
+        let command_text = self.workspace.fill(command.program.clone().as_str());
+        let result = process::Command::new(command_text)
             .args(formatted_args)
             .output()
             .await;
@@ -101,9 +117,11 @@ impl SummandRunner {
     }
 
     pub async fn execute_next(&mut self) {
+        self.workspace.prepare();
         if let Some(summand) = self.queue.pop_front() {
             println!("Executing summand {}", summand.name);
-            for command in summand.commands {
+            self.workspace.load_summand(&summand);
+            for command in &summand.commands {
                 let result = self.run_command(command).await;
                 match result {
                     Ok(summand_result) => {
@@ -128,6 +146,7 @@ impl SummandRunner {
                     }
                 }
             }
+            self.workspace.unload_summand(&summand);
         } else {
             println!("No commands in the queue.");
         }

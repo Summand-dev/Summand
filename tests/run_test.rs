@@ -1,27 +1,24 @@
-use summand::argument::Argument;
-use summand::command::Command;
-use summand::core::SummandRunner;
-use summand::summand::Summand;
+use summand::{argument::CommandArgument, command::Command, core::SummandRunner, summand::Summand};
 
-fn create_command() -> Command {
+pub fn create_runner() -> SummandRunner {
+    let summand_runner = SummandRunner::new();
+    return summand_runner;
+}
+
+pub fn create_command() -> Command {
     let echo_command = Command::new(
         "Echo",
         Some("Echo a fixed value"),
         "echo",
-        Some(vec![Argument::new(None, Some("Test"))]),
+        Some(vec![CommandArgument::new(None, Some("Test"))]),
     );
     return echo_command;
 }
 
-fn create_summand() -> Summand {
+pub fn create_summand() -> Summand {
     let echo_command = create_command();
     let echo_summand = Summand::new("Echo", Some("Echo test"), Some(vec![echo_command]));
     return echo_summand;
-}
-
-fn create_runner() -> SummandRunner {
-    let summand_runner = SummandRunner::new();
-    return summand_runner;
 }
 
 #[tokio::test]

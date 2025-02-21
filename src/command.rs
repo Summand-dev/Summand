@@ -1,13 +1,13 @@
 use std::process::Output;
 
-use crate::argument::Argument;
+use crate::argument::CommandArgument;
 
 #[derive(Clone, Debug)]
 pub struct Command {
     pub name: String,
     pub description: String,
     pub program: String,
-    pub arguments: Vec<Argument>,
+    pub arguments: Vec<CommandArgument>,
     pub output: Option<Output>,
 }
 
@@ -16,7 +16,7 @@ impl Command {
         name: &str,
         description: Option<&str>,
         program: &str,
-        arguments: Option<Vec<Argument>>,
+        arguments: Option<Vec<CommandArgument>>,
     ) -> Self {
         Self {
             name: name.to_string(),

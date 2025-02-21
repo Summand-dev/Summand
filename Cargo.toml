@@ -18,6 +18,7 @@ api = { path = "./api", optional = true }
 node = { path = "./node", optional = true }
 tokio = { version = "1.42.0", features = ["full"] }
 mini-redis = "0.4.1"
+regex = "1.11.1"
 
 [lib]
 name = "summand"
