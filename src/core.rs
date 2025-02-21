@@ -94,11 +94,12 @@ impl SummandRunner {
             })
             .collect();
 
-        println!("args: {:?}, {:?}", formatted_args, command.arguments);
-        let start_time = SystemTime::now();
-
         // Apply workspace variables to command and execute
         let command_text = self.workspace.fill(command.program.clone().as_str());
+
+        println!("run: {} {:?}", command_text, formatted_args);
+
+        let start_time = SystemTime::now();
         let result = process::Command::new(command_text)
             .args(formatted_args)
             .output()
@@ -118,6 +119,7 @@ impl SummandRunner {
 
     pub async fn execute_next(&mut self) {
         self.workspace.prepare();
+        println!("{}", self.workspace);
         if let Some(summand) = self.queue.pop_front() {
             println!("Executing summand {}", summand.name);
             self.workspace.load_summand(&summand);

@@ -1,3 +1,4 @@
+use core::fmt;
 use std::{collections::HashMap, str::FromStr};
 
 use regex::Regex;
@@ -57,10 +58,6 @@ impl SummandWorkspace {
                 .iter()
                 .map(|(k, v)| (format!("$${}", k), v.clone())),
         );
-        println!("summand vars: {:?}", &self.summand_variables);
-        println!("user vars   : {:?}", &self.user_variables);
-        println!("env vars    : {:?}", &self.env_variables);
-        println!("prepared    : {:?}", merged);
         self.map = merged;
 
         let pattern = self
@@ -82,5 +79,11 @@ impl SummandWorkspace {
                 self.map.get(&caps[0]).unwrap().to_string()
             })
             .to_string()
+    }
+}
+
+impl fmt::Display for SummandWorkspace {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Summand Workspace(map: {:?})", self.map,)
     }
 }
