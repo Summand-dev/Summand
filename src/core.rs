@@ -1,6 +1,12 @@
 use crate::command::Command;
 use crate::summand::Summand;
-use std::{collections::VecDeque, process::Output};
+use core::fmt;
+use std::{
+    collections::VecDeque,
+    os::unix::process::ExitStatusExt,
+    process::{ExitStatus, Output},
+    time::SystemTime,
+};
 use tokio::process;
 
 pub struct SummandRunner {
@@ -12,10 +18,27 @@ pub struct SummandRunner {
 pub struct SummandRunnerResult {
     pub output: Option<Output>,
     pub error: Option<std::io::Error>,
+    pub start_time: Option<SystemTime>,
+    pub end_time: Option<SystemTime>,
+}
+
+impl fmt::Display for SummandRunnerResult {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "Summand Result(result: {}, run_time: {}ms)",
+            self.output.as_ref().unwrap().status,
+            self.end_time
+                .unwrap()
+                .duration_since(self.start_time.unwrap())
+                .unwrap_or_else(|_| std::time::Duration::from_millis(0))
+                .as_millis(),
+        )
+    }
 }
 
 impl SummandRunnerResult {
-    pub fn to_string(self) -> String {
+    pub fn cli_output_string(self) -> String {
         match self.output {
             Some(o) => String::from_utf8_lossy(&o.stdout).to_string(),
             None => "".to_string(),
@@ -47,25 +70,32 @@ impl SummandRunner {
         self.queue.push_back(summand.to_owned());
     }
 
-    async fn run_command(&self, command: Command) -> Result<Output, std::io::Error> {
+    async fn run_command(&self, command: Command) -> Result<SummandRunnerResult, std::io::Error> {
         // Build the command arguments
         let formatted_args: Vec<String> = command
             .arguments
             .iter()
             .map(|a| match &a.name {
-                Some(name) => format!("--{}={}", name, a.value.clone().unwrap_or_default()),
+                Some(name) => format!("{}={}", name, a.value.clone().unwrap_or_default()),
                 None => format!("{}", a.value.clone().unwrap_or_default()),
             })
             .collect();
 
         println!("args: {:?}, {:?}", formatted_args, command.arguments);
+        let start_time = SystemTime::now();
         let result = process::Command::new(command.program)
             .args(formatted_args)
             .output()
             .await;
+        let end_time = SystemTime::now();
 
         match result {
-            Ok(output) => Ok(output),
+            Ok(output) => Ok(SummandRunnerResult {
+                output: Some(output.clone()),
+                error: None,
+                start_time: Option::from(start_time),
+                end_time: Option::from(end_time),
+            }),
             Err(err) => Err(err),
         }
     }
@@ -76,21 +106,24 @@ impl SummandRunner {
             for command in summand.commands {
                 let result = self.run_command(command).await;
                 match result {
-                    Ok(output) => {
+                    Ok(summand_result) => {
+                        let status = match &summand_result.output {
+                            Some(out) => out.status,
+                            None => ExitStatus::from_raw(0),
+                        };
                         println!(
                             "Summand `{}` executed successfully with status {}.",
-                            summand.name, output.status
+                            summand.name, status
                         );
-                        self.run_queue.push_front(SummandRunnerResult {
-                            output: Some(output.clone()),
-                            error: None,
-                        });
+                        self.run_queue.push_front(summand_result);
                     }
                     Err(e) => {
                         println!("Error executing command {:?}", e);
                         self.run_queue.push_front(SummandRunnerResult {
                             output: None,
                             error: Some(e),
+                            start_time: None,
+                            end_time: None,
                         });
                     }
                 }

@@ -32,6 +32,6 @@ async fn test_summand() {
     runner.execute_next().await;
     let result = runner.pop_output();
     let response = result.unwrap();
-    println!("output {:?}", response);
-    assert_eq!(response.to_string(), "Test\n".to_string());
+    println!("{}", response);
+    assert_eq!(response.cli_output_string(), "Test\n".to_string());
 }
