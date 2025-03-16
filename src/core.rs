@@ -3,7 +3,8 @@ use crate::{command::Command, workspace::SummandWorkspace};
 use core::fmt;
 use std::{
     collections::VecDeque,
-    os::unix::process::ExitStatusExt,
+    // os::unix::process::ExitStatusExt,
+    os::windows::process::ExitStatusExt,
     process::{ExitStatus, Output},
     time::SystemTime,
 };
