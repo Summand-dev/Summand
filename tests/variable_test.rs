@@ -1,4 +1,4 @@
-use summand::{
+use summand_app::{
     argument::CommandArgument, command::Command, core::SummandRunner, summand::Summand,
     variable::SummandVariable,
 };

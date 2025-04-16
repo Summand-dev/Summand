@@ -5,24 +5,22 @@ edition = "2021"
 
 [workspace]
 members = [
-    "api",
-    "node",
+    "crates/summand_app",
+    "crates/summand_api",
+    "crates/summand_cli",
+    "crates/summand_node",
 ]
 
 [features]
-api-module=["api"]
-node-module=["node"]
+api-module=["summand_api"]
+node-module=["summand_node"]
 
 [dependencies]
-api = { path = "./api", optional = true }
-node = { path = "./node", optional = true }
-tokio = { version = "1.42.0", features = ["full"] }
-mini-redis = "0.4.1"
-regex = "1.11.1"
-
-[lib]
-name = "summand"
-path = "src/lib.rs"
+summand_app = { path = "./crates/summand_app" }
+summand_cli = { path = "./crates/summand_cli", optional = true }
+summand_api = { path = "./crates/summand_api", optional = true }
+summand_node = { path = "./crates/summand_node", optional = true }
+tokio = { version = "1.44.0", features = ["full"] }
 
 [[bin]]
 name = "summand"

@@ -1,4 +1,4 @@
-use summand::{argument::CommandArgument, command::Command, core::SummandRunner, summand::Summand};
+use summand_app::{argument::CommandArgument, command::Command, core::SummandRunner, summand::Summand};
 
 pub fn create_runner() -> SummandRunner {
     let summand_runner = SummandRunner::new();

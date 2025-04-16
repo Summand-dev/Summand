@@ -1,0 +1,13 @@
+[package]
+name = "summand_app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.44.0", features = ["full"] }
+mini-redis = "0.4.1"
+regex = "1.11.1"
+
+[lib]
+name = "summand_app"
+path = "src/lib.rs"

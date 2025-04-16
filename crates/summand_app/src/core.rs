@@ -29,12 +29,17 @@ impl fmt::Display for SummandRunnerResult {
         write!(
             f,
             "Summand Result(result: {}, run_time: {}ms)",
-            self.output.as_ref().unwrap().status,
-            self.end_time
-                .unwrap()
-                .duration_since(self.start_time.unwrap())
-                .unwrap_or_else(|_| std::time::Duration::from_millis(0))
-                .as_millis(),
+            match self.output.as_ref() {
+                Some(output) => output.status,
+                None => ExitStatus::from_raw(0),
+            },
+            match self.end_time {
+                Some(end_time) => end_time
+                    .duration_since(self.start_time.unwrap())
+                    .unwrap_or_else(|_| std::time::Duration::from_millis(0))
+                    .as_millis(),
+                None => 0,
+            },
         )
     }
 }
