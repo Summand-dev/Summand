@@ -1,4 +1,4 @@
-use crate::{command::Command, variable::SummandVariable};
+use crate::{command::Command, compatiblity::SummandCompatiblity, variable::SummandVariable};
 
 #[derive(Clone, Debug)]
 pub struct Summand {
@@ -6,6 +6,7 @@ pub struct Summand {
     pub description: String,
     pub commands: Vec<Command>,
     pub variables: Vec<SummandVariable>,
+    pub compatiblities: Vec<SummandCompatiblity>,
 }
 
 impl Summand {
@@ -15,6 +16,7 @@ impl Summand {
             description: description.unwrap_or("").to_string(),
             commands: commands.unwrap_or(Vec::new()),
             variables: Vec::new(),
+            compatiblities: Vec::new()
         }
     }
 }

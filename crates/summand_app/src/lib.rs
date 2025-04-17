@@ -7,3 +7,5 @@ pub mod core;
 pub mod variable;
 pub mod workspace;
 pub mod patterns;
+pub mod compatiblity;
+pub mod validator;

@@ -16,13 +16,25 @@ pub struct SummandWorkspace {
 
 impl SummandWorkspace {
     pub fn new() -> Self {
-        SummandWorkspace {
+        let mut workspace = SummandWorkspace {
             env_variables: HashMap::new(),
             summand_variables: HashMap::new(),
             user_variables: HashMap::new(),
             map: HashMap::new(),
             regex: Regex::from_str("").unwrap(),
+        };
+        workspace.detect_runtime();
+        workspace
+    }
+
+    fn detect_runtime(&mut self) {
+        let mut platform = "unix";
+        if cfg!(target_os = "windows") {
+            platform = "windows";
+        } else if cfg!(target_os = "macos") {
+            platform = "macos";
         }
+        self.env_variables.insert("OS_NAME".to_string(), platform.to_string());
     }
 
     pub fn load_summand(&mut self, summand: &Summand) {
