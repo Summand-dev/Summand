@@ -1,0 +1,20 @@
+{
+    "name": "Install Bat",
+    "description": "This script install Bat command",
+    "capability": [
+        {
+            "name": "bat",
+            "version": "0.25.0",
+            "type": "add"
+        }
+    ],
+    "compatiblities": [
+        { "type": "platform", "allow": [ "macos", "linux" ] }
+    ],
+    "strategy": {
+        "run_strategy": "retry:2"
+    },
+    "commands": [
+        { "name": "", "description": "", "program": "apt", "args": [ { "name": "install" }, { "name": "bat" }] }
+    ]
+}
