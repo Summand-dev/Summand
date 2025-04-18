@@ -5,13 +5,11 @@ edition = "2021"
 
 [workspace]
 members = [
-    "crates/summand_app",
-    "crates/summand_api",
-    "crates/summand_cli",
-    "crates/summand_node",
+    "crates/*",
 ]
 
 [features]
+cli-module=["summand_cli"]
 api-module=["summand_api"]
 node-module=["summand_node"]
 

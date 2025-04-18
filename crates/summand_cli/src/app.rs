@@ -1,14 +1,16 @@
-use crate::commands::{self, Cli};
+use crate::commands::{self, Command};
 use clap::Parser;
 
-pub struct CliRunner {
-    cli: Cli,
+#[derive(Parser, Debug, Clone)]
+#[command(author, version, about)]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Command,
 }
 
-impl CliRunner {
+impl Cli {
     pub fn new() -> Self {
-        let cli = Cli::parse();
-        Self { cli }
+        Self::parse()
     }
 
     pub fn init() -> Self {
@@ -16,7 +18,7 @@ impl CliRunner {
     }
 
     pub fn run(&self) -> std::process::ExitCode {
-        if let Err(err) = commands::run_command(self.cli.command.clone()) {
+        if let Err(err) = commands::run_command(self.command.clone()) {
             eprintln!("Error: {}", err);
             return std::process::ExitCode::FAILURE;
         }

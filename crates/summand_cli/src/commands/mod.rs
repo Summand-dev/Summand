@@ -1,21 +1,14 @@
 pub mod version;
 
-use clap::{Parser, Subcommand};
-
-#[derive(Parser, Debug, Clone)]
-#[command(author, version, about)]
-pub struct Cli {
-    #[command(subcommand)]
-    pub command: Commands,
-}
+use clap::Subcommand;
 
 #[derive(Subcommand, Debug, Clone)]
-pub enum Commands {
+pub enum Command {
     Version,
 }
 
-pub fn run_command(command: Commands) -> anyhow::Result<()> {
+pub fn run_command(command: Command) -> anyhow::Result<()> {
     match command {
-        Commands::Version => version::handle(),
+        Command::Version => version::handle(),
     }
 }

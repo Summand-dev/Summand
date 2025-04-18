@@ -3,12 +3,17 @@ use crate::{command::Command, workspace::SummandWorkspace};
 use core::fmt;
 use std::{
     collections::VecDeque,
-    // os::unix::process::ExitStatusExt,
-    os::windows::process::ExitStatusExt,
     process::{ExitStatus, Output},
     time::SystemTime,
 };
 use tokio::process;
+
+#[cfg(target_os = "linux")]
+use std::os::unix::process::ExitStatusExt;
+#[cfg(target_os = "macos")]
+use std::os::unix::process::ExitStatusExt;
+#[cfg(target_os = "windows")]
+use std::os::windows::process::ExitStatusExt;
 
 pub struct SummandRunner {
     queue: VecDeque<Summand>,

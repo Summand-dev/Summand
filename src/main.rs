@@ -1,14 +1,19 @@
 #[cfg(feature = "api-module")]
-use api::server;
+use summand_api::server;
+
+#[cfg(feature = "cli-module")]
+use summand_cli::app::Cli;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     println!("Summand is starting ...");
     #[cfg(feature = "api-module")]
     {
-        if let Err(e) = server::run().await {
-            eprintln!("Api encountered an error: {}", e);
-        }
+        server::run();
+    }
+    #[cfg(feature = "cli-module")]
+    {
+        Cli::init().run();
     }
     // tokio::signal::ctrl_c()
     //     .await
