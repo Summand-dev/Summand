@@ -3,7 +3,7 @@ use core::fmt;
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub enum SummandCompatiblityType {
     Platform,
-    Capablity
+    Capablity,
 }
 
 impl fmt::Display for SummandCompatiblityType {
@@ -13,7 +13,7 @@ impl fmt::Display for SummandCompatiblityType {
             "{}",
             match self {
                 SummandCompatiblityType::Capablity => "CapablityFilter",
-                SummandCompatiblityType::Platform => "PlatformFilter"
+                SummandCompatiblityType::Platform => "PlatformFilter",
             }
         )
     }
@@ -23,7 +23,7 @@ impl fmt::Display for SummandCompatiblityType {
 pub struct SummandCompatiblity {
     pub compatiblity_type: SummandCompatiblityType,
     pub allow: Vec<String>,
-    pub disallow: Vec<String>
+    pub disallow: Vec<String>,
 }
 
 impl SummandCompatiblity {
@@ -45,9 +45,7 @@ impl fmt::Display for SummandCompatiblity {
         write!(
             f,
             "Summand Compatiblity(type: {}, allow: {:?}, disallow: {:?})",
-            self.compatiblity_type,
-            self.allow,
-            self.disallow
+            self.compatiblity_type, self.allow, self.disallow
         )
     }
 }

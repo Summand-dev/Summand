@@ -12,12 +12,14 @@ members = [
 cli-module=["summand_cli"]
 api-module=["summand_api"]
 node-module=["summand_node"]
+parser-module=["summand_parser"]
 
 [dependencies]
 summand_app = { path = "./crates/summand_app" }
 summand_cli = { path = "./crates/summand_cli", optional = true }
 summand_api = { path = "./crates/summand_api", optional = true }
 summand_node = { path = "./crates/summand_node", optional = true }
+summand_parser = { path = "./crates/summand_parser", optional = true }
 tokio = { version = "1.44.0", features = ["full"] }
 
 [[bin]]
