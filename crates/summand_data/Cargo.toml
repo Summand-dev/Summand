@@ -4,7 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+serde = { version = "1.0.104", features = ["derive"] }
+serde_json = "1.0.140"
+duckdb = { version = "1.2.2", features = ["bundled"] }
 summand_app = { path = "../summand_app" }
+
+[dependencies.uuid]
+version = "1.16.0"
+features = [
+    "v4",
+]
 
 [lib]
 name = "summand_data"

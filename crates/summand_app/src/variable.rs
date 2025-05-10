@@ -1,6 +1,8 @@
 use core::fmt;
 
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SummandVariable {
     pub name: String,
     pub description: String,

@@ -1,4 +1,6 @@
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CommandArgument {
     pub name: Option<String>,
     pub value: Option<String>,

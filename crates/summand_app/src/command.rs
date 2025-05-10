@@ -1,13 +1,16 @@
 use std::process::Output;
 
+use serde::{Deserialize, Serialize};
+
 use crate::argument::CommandArgument;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Command {
     pub name: String,
     pub description: String,
     pub program: String,
     pub arguments: Vec<CommandArgument>,
+    #[serde(skip)]
     pub output: Option<Output>,
 }
 

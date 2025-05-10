@@ -1,6 +1,8 @@
 use core::fmt;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct SummandStrategy {
     run_strategy: RunStrategies,
 }
@@ -13,7 +15,7 @@ impl SummandStrategy {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum RunStrategies {
     Ignore(RunIgnoreStrategy),
     Retry(RunRetryStrategy),
@@ -37,7 +39,7 @@ pub trait RunStrategy {
     fn handle(&mut self) -> Result<(), RunStrategyError>;
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct RunRetryStrategy {
     max_retry: i32,
     retry_count: i32,
@@ -61,7 +63,7 @@ impl RunStrategy for RunRetryStrategy {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct RunBreakStrategy {}
 impl RunBreakStrategy {
     pub fn new() -> RunBreakStrategy {
@@ -76,7 +78,7 @@ impl RunStrategy for RunBreakStrategy {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct RunIgnoreStrategy {}
 impl RunIgnoreStrategy {
     pub fn new() -> RunIgnoreStrategy {

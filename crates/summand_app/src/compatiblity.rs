@@ -1,6 +1,8 @@
 use core::fmt;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SummandCompatiblityType {
     Platform,
     Capablity,
@@ -19,7 +21,7 @@ impl fmt::Display for SummandCompatiblityType {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SummandCompatiblity {
     pub compatiblity_type: SummandCompatiblityType,
     pub allow: Vec<String>,

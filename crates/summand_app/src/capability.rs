@@ -1,6 +1,8 @@
 use core::fmt;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SummandCapabilityType {
     Add,
     Remove,
@@ -19,7 +21,7 @@ impl fmt::Display for SummandCapabilityType {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SummandCapability {
     pub name: String,
     pub capability_type: SummandCapabilityType,
