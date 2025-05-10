@@ -20,6 +20,7 @@ pub struct Summand {
 impl Summand {
     pub fn new(name: &str, description: Option<&str>, commands: Option<Vec<Command>>) -> Self {
         Self {
+            id: ; 
             name: name.to_string(),
             description: description.unwrap_or("").to_string(),
             commands: commands.unwrap_or(Vec::new()),

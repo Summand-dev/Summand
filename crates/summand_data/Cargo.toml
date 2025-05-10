@@ -1,0 +1,11 @@
+[package]
+name = "summand_data"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+summand_app = { path = "../summand_app" }
+
+[lib]
+name = "summand_data"
+path = "src/lib.rs"
