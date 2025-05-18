@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.98"
 clap = { version = "4.5.36", features = ["derive"] }
+summand_app = { path = "../summand_app" }
 summand_data = { path = "../summand_data" }
 
 [lib]

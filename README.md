@@ -2,6 +2,10 @@
 
 Summand Cli
 
+# Run
+```shell
+cargo run --features cli-module -- [COMMAND] [OPTIONS]
+```
 # Run test
 
 ```shell

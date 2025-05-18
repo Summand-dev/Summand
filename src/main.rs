@@ -13,7 +13,7 @@ async fn main() -> std::io::Result<()> {
     }
     #[cfg(feature = "cli-module")]
     {
-        Cli::init().run();
+        Cli::init().await.run().await;
     }
     // tokio::signal::ctrl_c()
     //     .await

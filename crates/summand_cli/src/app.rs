@@ -1,9 +1,9 @@
 use crate::commands::{self, Command};
 use clap::Parser;
-use summand_data::{adapters::dockdb_data_adapter::DockdbDataAdapter, data_adapter::DataAdapter};
+use summand_data::{adapters::sqlx_data_adapter::SQLxDataAdapter, data_adapter::DataAdapter};
 
 pub struct Cli {
-    pub data_adapter: DockdbDataAdapter,
+    // pub data_adapter: SQLxDataAdapter,
     pub clap: CliClap,
 }
 
@@ -15,19 +15,19 @@ pub struct CliClap {
 }
 
 impl Cli {
-    pub fn new() -> Self {
+    pub async fn new() -> Self {
         Cli {
             clap: CliClap::parse(),
-            data_adapter: DockdbDataAdapter::new(),
+            // data_adapter: SQLxDataAdapter::new().await,
         }
     }
 
-    pub fn init() -> Self {
-        Self::new()
+    pub async fn init() -> Self {
+        Self::new().await
     }
 
-    pub fn run(&self) -> std::process::ExitCode {
-        if let Err(err) = commands::run_command(self.clap.command.clone()) {
+    pub async fn run(&self) -> std::process::ExitCode {
+        if let Err(err) = commands::run_command(self.clap.command.clone()).await {
             eprintln!("Error: {}", err);
             return std::process::ExitCode::FAILURE;
         }
