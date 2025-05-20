@@ -6,6 +6,6 @@ pub trait DataAdapter<T> {
     async fn create(&self, summand: &Summand);
     async fn update(&self, id: Uuid, summand: &Summand);
     async fn remove(&self, id: Uuid);
-    async fn find(&self, id: Uuid) -> Option<Summand>;
+    async fn find(&self, name: String) -> Option<Summand>;
     async fn find_all(&self) -> Vec<Summand>;
 }

@@ -1,6 +1,6 @@
 use crate::commands::{self, Command};
 use clap::Parser;
-use summand_data::{adapters::sqlx_data_adapter::SQLxDataAdapter, data_adapter::DataAdapter};
+// use summand_data::{adapters::sqlx_data_adapter::SQLxDataAdapter, data_adapter::DataAdapter};
 
 pub struct Cli {
     // pub data_adapter: SQLxDataAdapter,
