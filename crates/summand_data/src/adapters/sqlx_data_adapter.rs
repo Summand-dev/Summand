@@ -1,4 +1,5 @@
 use std::fs::File;
+use std::path::Path;
 
 use sqlx::{SqlitePool};
 use sqlx::Row;
@@ -16,7 +17,9 @@ impl DataAdapter<SQLxDataAdapter> for SQLxDataAdapter {
     async fn new() -> SQLxDataAdapter {
         let app_dir = "./";
         
-        let database_file = File::create(format!("{}summand.db", app_dir));
+        if !Path::new(&(app_dir.to_string() + "summand.db")).exists() {
+            let database_file = File::create(format!("{}summand.db", app_dir));
+        }
 
         let pool = SqlitePool::connect("sqlite:summand.db").await;
         match pool {

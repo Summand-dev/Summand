@@ -6,8 +6,11 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.98"
 clap = { version = "4.5.36", features = ["derive"] }
+url = "2.5.4"
+serde_json = "1.0.140"
 summand_app = { path = "../summand_app" }
 summand_data = { path = "../summand_data" }
+summand_parser = { path = "../summand_parser" }
 
 [lib]
 name = "summand_cli"
