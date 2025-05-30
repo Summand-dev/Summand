@@ -1,6 +1,7 @@
 #[macro_use]
 
 pub mod summand;
+pub mod app;
 pub mod argument;
 pub mod capability;
 pub mod command;
