@@ -37,7 +37,7 @@ fn run_app() {
 
     // Use Database as the same type here
     let db = app.di.resolve::<Database>("db");
-
+    
     println!("Resolved: {:?}", db);
     assert_eq!(db.unwrap().url, "postgres://localhost");
 }

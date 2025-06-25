@@ -1,12 +1,15 @@
-use std::any::{type_name_of_val, Any};
+use std::any::{type_name_of_val, Any, TypeId};
 use std::collections::HashMap;
 use std::fmt::Debug;
 
-pub trait Injectable: Any + Send + Sync {
+use downcast_rs::{impl_downcast, Downcast};
+
+pub trait Injectable: Downcast + Any + Send + Sync {
     fn as_any(&self) -> &dyn Any;
     fn as_any_mut(&mut self) -> &mut dyn Any;
     fn into_any(self: Box<Self>) -> Box<dyn Any>;
 }
+impl_downcast!(Injectable);
 
 impl<T: Any + Send + Sync> Injectable for T {
     fn as_any(&self) -> &dyn Any {
@@ -20,18 +23,18 @@ impl<T: Any + Send + Sync> Injectable for T {
     }
 }
 
-impl Debug for dyn Injectable {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // Try to print if the inner type is Debug
-        if let Some(debuggable) = self.as_any().downcast_ref::<&(dyn Debug + 'static)>() {
-            write!(f, "{:?}", debuggable)
-        } else if let Some(debuggable) = self.as_any().downcast_ref::<&(dyn Debug)>() {
-            write!(f, "{:?}", debuggable)
-        } else {
-            write!(f, "Injectable type: {:?}", type_name_of_val(self))
-        }
-    }
-}
+// impl Debug for dyn Injectable {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         // Try to print if the inner type is Debug
+//         if let Some(debuggable) = self.downcast_ref::<&(dyn Debug + 'static)>() {
+//             write!(f, "{:?}", debuggable)
+//         } else if let Some(debuggable) = self.as_any().downcast_ref::<&(dyn Debug)>() {
+//             write!(f, "{:?}", debuggable)
+//         } else {
+//             write!(f, "Injectable type: {:?}", type_name_of_val(self))
+//         }
+//     }
+// }
 
 #[derive(Debug)]
 pub enum InjectionType {
@@ -77,24 +80,28 @@ impl DependencyInjector {
         self.instances.insert(key.to_string(), instance);
     }
 
-    pub fn resolve<T: Injectable + 'static>(&mut self, key: &str) -> Option<&T> {
+    pub fn resolve<T: Injectable + Debug + 'static>(&mut self, key: &str) -> Option<&T> {
         match self.bindings.get(key) {
             Some(binding) => match binding.injection_type {
                 InjectionType::Singletone => {
                     if !self.instances.contains_key(key) {
                         let instance = (binding.initiator)();
+                        // println!("Created new instance {:?}", instance);
                         self.instances.insert(key.to_string(), instance);
                     }
-                    self.instances
+                    let original = self
+                        .instances
                         .get(key)
-                        .and_then(|boxed| boxed.as_any().downcast_ref::<T>())
+                        .and_then(|boxed| boxed.downcast_ref::<T>());
+                    println!("Origian type {:?}", original);
+                    original
                 }
                 InjectionType::New => {
                     let instance = (binding.initiator)();
                     self.instances.insert(key.to_string(), instance);
                     self.instances
                         .get(key)
-                        .and_then(|boxed| boxed.as_any().downcast_ref::<T>())
+                        .and_then(|boxed| boxed.downcast_ref::<T>())
                 }
             },
             None => None,
@@ -105,7 +112,7 @@ impl DependencyInjector {
     pub fn resolve_owned<T: Injectable + 'static>(&self, key: &str) -> Option<Box<T>> {
         self.bindings.get(key).map(|binding| {
             let boxed = (binding.initiator)();
-            boxed.into_any().downcast::<T>().ok()
+            boxed.downcast::<T>().ok()
         })?
     }
 }
