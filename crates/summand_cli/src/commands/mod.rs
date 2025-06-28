@@ -1,11 +1,12 @@
-pub mod version;
 pub mod add;
-pub mod list;
-pub mod import;
 pub mod export;
+pub mod import;
+pub mod list;
 pub mod run;
+pub mod version;
 
 use clap::Subcommand;
+use summand_app::app::application::Application;
 
 #[derive(Subcommand, Debug, Clone)]
 pub enum Command {
@@ -17,9 +18,9 @@ pub enum Command {
     Run(run::RunArgs),
 }
 
-pub async fn run_command(command: Command) -> anyhow::Result<()> {
+pub async fn run_command(command: Command, app: &Application) -> anyhow::Result<()> {
     match command {
-        Command::Version => version::handle().await,
+        Command::Version => version::handle(app).await,
         Command::Add(args) => add::handle(args).await,
         Command::List(args) => list::handle(args).await,
         Command::Import(args) => import::handle(args).await,

@@ -6,6 +6,7 @@ pub mod argument;
 pub mod capability;
 pub mod command;
 pub mod compatiblity;
+pub mod config;
 pub mod core;
 pub mod patterns;
 pub mod strategy;
